@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9531" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="tne-QT-ifu">
+            <objects>
+                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="SSL_Pinning" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
+                        <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="LQ0-Tb-b01">
+                                <rect key="frame" x="15" y="30" width="345" height="30"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="URL"/>
+                            </textField>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="nUC-gc-20h">
+                                <rect key="frame" x="15" y="70" width="345" height="487"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="c0C-Lc-gz5">
+                                <rect key="frame" x="15" y="567" width="345" height="30"/>
+                                <state key="normal" title="Submit using RetroFit"/>
+                                <connections>
+                                    <action selector="alamoFireRequestHandler:" destination="BYZ-38-t0r" eventType="touchUpInside" id="YEH-fp-fHQ"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xy7-Mc-fSZ">
+                                <rect key="frame" x="15" y="607" width="345" height="40"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="60c-Dw-S9m"/>
+                                </constraints>
+                                <state key="normal" title="Submit using NSURLSession"/>
+                                <connections>
+                                    <action selector="nsurlSessionRequestHandler:" destination="BYZ-38-t0r" eventType="touchUpInside" id="r07-5p-ejM"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="nUC-gc-20h" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="15" id="18x-0n-zBr"/>
+                            <constraint firstItem="xy7-Mc-fSZ" firstAttribute="top" secondItem="c0C-Lc-gz5" secondAttribute="bottom" constant="10" id="Chh-6M-3w1"/>
+                            <constraint firstAttribute="trailing" secondItem="LQ0-Tb-b01" secondAttribute="trailing" constant="15" id="Ck7-Bk-KP9"/>
+                            <constraint firstItem="c0C-Lc-gz5" firstAttribute="top" secondItem="nUC-gc-20h" secondAttribute="bottom" constant="10" id="FK6-Xd-a6i"/>
+                            <constraint firstAttribute="trailing" secondItem="nUC-gc-20h" secondAttribute="trailing" constant="15" id="GQq-SX-PBb"/>
+                            <constraint firstItem="nUC-gc-20h" firstAttribute="top" secondItem="LQ0-Tb-b01" secondAttribute="bottom" constant="10" id="Mif-0F-iwO"/>
+                            <constraint firstAttribute="trailing" secondItem="xy7-Mc-fSZ" secondAttribute="trailing" constant="15" id="UJx-We-a0D"/>
+                            <constraint firstItem="c0C-Lc-gz5" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="15" id="V0h-Ze-RCe"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="xy7-Mc-fSZ" secondAttribute="bottom" constant="20" id="YvG-3T-nav"/>
+                            <constraint firstAttribute="trailing" secondItem="c0C-Lc-gz5" secondAttribute="trailing" constant="15" id="aR4-ha-W7Y"/>
+                            <constraint firstItem="xy7-Mc-fSZ" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="15" id="l6p-WD-a5A"/>
+                            <constraint firstItem="LQ0-Tb-b01" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="15" id="l8k-Qj-aIv"/>
+                            <constraint firstItem="LQ0-Tb-b01" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="10" id="teg-0e-Rp1"/>
+                        </constraints>
+                    </view>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
+                    <connections>
+                        <outlet property="responseTextView" destination="nUC-gc-20h" id="cPG-wp-ScT"/>
+                        <outlet property="urlTextField" destination="LQ0-Tb-b01" id="qWF-O7-A8S"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="453.5" y="510.5"/>
+        </scene>
+    </scenes>
+</document>
