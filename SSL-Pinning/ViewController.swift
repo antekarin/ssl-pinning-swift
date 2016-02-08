@@ -9,36 +9,62 @@
 import UIKit
 import Alamofire
 
+
+
 class ViewController: UIViewController, NSURLSessionDelegate, NSURLSessionTaskDelegate {
 
+    let githubCert = "github.com"
+    let corruptedCert = "corrupted"
+    
     @IBOutlet weak var urlTextField: UITextField!
     @IBOutlet weak var responseTextView: UITextView!
+    @IBOutlet weak var certificateCorruptionButton: UIButton!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
     var urlSession: NSURLSession!
     var serverTrustPolicy: ServerTrustPolicy!
     var serverTrustPolicies: [String: ServerTrustPolicy]!
     var afManager : Manager!
     
+    var isSimulatingCertificateCorruption: Bool?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.configureAlamoFireSSLPinning()
+        
+        let pathToCert = NSBundle.mainBundle().pathForResource(githubCert, ofType: "cer")
+        let localCertificate:NSData = NSData(contentsOfFile: pathToCert!)!
+        self.configureAlamoFireSSLPinningWithCertificateData(localCertificate)
         self.configureURLSession()
+        
+        self.activityIndicator.hidesWhenStopped = true
     }
     
     // MARK: Button actions
     
     @IBAction func alamoFireRequestHandler(sender: UIButton) {
+        self.activityIndicator.startAnimating()
         self.afManager.request(.GET, self.urlTextField.text!)
-            .responseString { response in
-                if let json = response.result.value {
-                    self.responseTextView.text = json
+            .response { request, response, data, error in
+                if error == nil {
+                    if let responseData = data {
+                        self.responseTextView.text = String(data: responseData, encoding: NSUTF8StringEncoding)!
+                    }
+                    self.responseTextView.textColor = UIColor.blackColor()
+                } else {
+                    self.responseTextView.text = error?.description
+                    self.responseTextView.textColor = UIColor.redColor()
                 }
-                print(response.response?.statusCode)
+                self.activityIndicator.stopAnimating()
         }
     }
     
     @IBAction func nsurlSessionRequestHandler(sender: UIButton) {
+        self.activityIndicator.startAnimating()
         self.urlSession?.dataTaskWithURL(NSURL(string:self.urlTextField.text!)!, completionHandler: { (NSData data, NSURLResponse response, NSError error) -> Void in
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                self.activityIndicator.stopAnimating()
+                })
+            
             if let _ = data {
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
                     self.responseTextView.text = String(data: data!, encoding: NSUTF8StringEncoding)
@@ -55,11 +81,28 @@ class ViewController: UIViewController, NSURLSessionDelegate, NSURLSessionTaskDe
         }).resume()
     }
     
+    @IBAction func toggleCertificateSimulation(sender: AnyObject) {
+        if self.isSimulatingCertificateCorruption != nil {
+            self.isSimulatingCertificateCorruption = nil;
+            let pathToCert = NSBundle.mainBundle().pathForResource(githubCert, ofType: "cer")
+            let localCertificate:NSData = NSData(contentsOfFile: pathToCert!)!
+            self.configureAlamoFireSSLPinningWithCertificateData(localCertificate)
+            self.certificateCorruptionButton.setTitleColor(self.certificateCorruptionButton.tintColor, forState: UIControlState.Normal)
+            self.certificateCorruptionButton.setTitle("Simulate certificate corruption", forState: UIControlState.Normal)
+        } else {
+            self.isSimulatingCertificateCorruption = true
+            let pathToCert = NSBundle.mainBundle().pathForResource(corruptedCert, ofType: "cer")
+            let localCertificate:NSData = NSData(contentsOfFile: pathToCert!)!
+            self.configureAlamoFireSSLPinningWithCertificateData(localCertificate)
+            self.certificateCorruptionButton.setTitleColor(UIColor.redColor(), forState: UIControlState.Normal)
+            self.certificateCorruptionButton.setTitle("Simulating certificate corruption", forState: UIControlState.Normal) 
+        }
+    }
     // MARK: SSL Config
     
-    func configureAlamoFireSSLPinning() {
+    func configureAlamoFireSSLPinningWithCertificateData(certificateData: NSData) {
         self.serverTrustPolicy = ServerTrustPolicy.PinCertificates(
-            certificates: ServerTrustPolicy.certificatesInBundle(),
+            certificates: [SecCertificateCreateWithData(nil, certificateData)!],
             validateCertificateChain: true,
             validateHost: true
         )
@@ -96,7 +139,7 @@ class ViewController: UIViewController, NSURLSessionDelegate, NSURLSessionTaskDe
         
         // Get local and remote cert data
         let remoteCertificateData:NSData = SecCertificateCopyData(certificate!)
-        let pathToCert = NSBundle.mainBundle().pathForResource("github.com", ofType: "cer")
+        let pathToCert = NSBundle.mainBundle().pathForResource(githubCert, ofType: "cer")
         let localCertificate:NSData = NSData(contentsOfFile: pathToCert!)!
         
         if (isServerTrusted && remoteCertificateData.isEqualToData(localCertificate)) {

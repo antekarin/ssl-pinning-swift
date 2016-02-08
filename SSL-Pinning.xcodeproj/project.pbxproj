@@ -13,6 +13,7 @@
 		463805251C6213B4003484E8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 463805241C6213B4003484E8 /* Assets.xcassets */; };
 		463805281C6213B4003484E8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 463805261C6213B4003484E8 /* LaunchScreen.storyboard */; };
 		463805311C621B16003484E8 /* github.com.cer in Resources */ = {isa = PBXBuildFile; fileRef = 463805301C621B16003484E8 /* github.com.cer */; };
+		46F7D2611C68B33800DDBC98 /* corrupted.cer in Resources */ = {isa = PBXBuildFile; fileRef = 46F7D2601C68B33800DDBC98 /* corrupted.cer */; };
 		CF113521FA8FFF30A279D518 /* Pods_SSL_Pinning.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5DD18964A5BFDEA797B1C5E /* Pods_SSL_Pinning.framework */; };
 /* End PBXBuildFile section */
 
@@ -26,6 +27,7 @@
 		463805271C6213B4003484E8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		463805291C6213B4003484E8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		463805301C621B16003484E8 /* github.com.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = github.com.cer; sourceTree = "<group>"; };
+		46F7D2601C68B33800DDBC98 /* corrupted.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = corrupted.cer; sourceTree = "<group>"; };
 		B5DD18964A5BFDEA797B1C5E /* Pods_SSL_Pinning.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SSL_Pinning.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C808BD1F09052AE4F5C5862A /* Pods-SSL-Pinning.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SSL-Pinning.release.xcconfig"; path = "Pods/Target Support Files/Pods-SSL-Pinning/Pods-SSL-Pinning.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -87,6 +89,7 @@
 			isa = PBXGroup;
 			children = (
 				463805301C621B16003484E8 /* github.com.cer */,
+				46F7D2601C68B33800DDBC98 /* corrupted.cer */,
 			);
 			name = Resouces;
 			path = Resources;
@@ -161,6 +164,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				46F7D2611C68B33800DDBC98 /* corrupted.cer in Resources */,
 				463805281C6213B4003484E8 /* LaunchScreen.storyboard in Resources */,
 				463805251C6213B4003484E8 /* Assets.xcassets in Resources */,
 				463805311C621B16003484E8 /* github.com.cer in Resources */,
