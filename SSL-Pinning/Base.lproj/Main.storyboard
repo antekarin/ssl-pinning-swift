@@ -31,7 +31,7 @@
                             </textView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="c0C-Lc-gz5">
                                 <rect key="frame" x="15" y="567" width="345" height="30"/>
-                                <state key="normal" title="Submit using RetroFit"/>
+                                <state key="normal" title="Submit using AlamoFire"/>
                                 <connections>
                                     <action selector="alamoFireRequestHandler:" destination="BYZ-38-t0r" eventType="touchUpInside" id="YEH-fp-fHQ"/>
                                 </connections>

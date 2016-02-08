@@ -14,36 +14,18 @@ class ViewController: UIViewController, NSURLSessionDelegate, NSURLSessionTaskDe
     @IBOutlet weak var urlTextField: UITextField!
     @IBOutlet weak var responseTextView: UITextView!
     
-    var urlSession: NSURLSession?
-    var serverTrustPolicy: ServerTrustPolicy?
+    var urlSession: NSURLSession!
+    var serverTrustPolicy: ServerTrustPolicy!
+    var serverTrustPolicies: [String: ServerTrustPolicy]!
     var afManager : Manager!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        //Configure NSURLSession
-        
-        urlSession = NSURLSession(configuration: NSURLSessionConfiguration.defaultSessionConfiguration(), delegate: self, delegateQueue: nil)
-        
-        //Configure NSURLSession
-        
-        self.serverTrustPolicy = ServerTrustPolicy.PinCertificates(
-            certificates: ServerTrustPolicy.certificatesInBundle(NSBundle.mainBundle()),
-            validateCertificateChain: true,
-            validateHost: true
-        )
-        
-        let serverTrustPolicies:[String: ServerTrustPolicy] = [
-            "github.com": self.serverTrustPolicy!
-        ]
-        
-        self.afManager = Alamofire.Manager(
-            configuration: NSURLSessionConfiguration.defaultSessionConfiguration(),
-            serverTrustPolicyManager: ServerTrustPolicyManager(policies: serverTrustPolicies)
-        )
+        self.configureAlamoFireSSLPinning()
+        self.configureURLSession()
     }
-
-    // MARK : Button actions
+    
+    // MARK: Button actions
     
     @IBAction func alamoFireRequestHandler(sender: UIButton) {
         self.afManager.request(.GET, self.urlTextField.text!)
@@ -70,8 +52,30 @@ class ViewController: UIViewController, NSURLSessionDelegate, NSURLSessionTaskDe
                     self.responseTextView.textColor = UIColor.redColor()
                 })
             }
-            
         }).resume()
+    }
+    
+    // MARK: SSL Config
+    
+    func configureAlamoFireSSLPinning() {
+        self.serverTrustPolicy = ServerTrustPolicy.PinCertificates(
+            certificates: ServerTrustPolicy.certificatesInBundle(),
+            validateCertificateChain: true,
+            validateHost: true
+        )
+        
+        self.serverTrustPolicies = [
+            "github.com": self.serverTrustPolicy!
+        ]
+        
+        self.afManager = Manager(
+            configuration: NSURLSessionConfiguration.defaultSessionConfiguration(),
+            serverTrustPolicyManager: ServerTrustPolicyManager(policies: self.serverTrustPolicies)
+        )
+    }
+    
+    func configureURLSession() {
+        self.urlSession = NSURLSession(configuration: NSURLSessionConfiguration.defaultSessionConfiguration(), delegate: self, delegateQueue: nil)
     }
     
     // MARK: URL session delegate
