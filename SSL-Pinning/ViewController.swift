@@ -9,24 +9,22 @@
 import UIKit
 import Alamofire
 
-
-
 class ViewController: UIViewController, NSURLSessionDelegate, NSURLSessionTaskDelegate {
-
-    let githubCert = "github.com"
-    let corruptedCert = "corrupted"
     
     @IBOutlet weak var urlTextField: UITextField!
     @IBOutlet weak var responseTextView: UITextView!
     @IBOutlet weak var certificateCorruptionButton: UIButton!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
+    let githubCert = "github.com"
+    let corruptedCert = "corrupted"
+    
     var urlSession: NSURLSession!
     var serverTrustPolicy: ServerTrustPolicy!
     var serverTrustPolicies: [String: ServerTrustPolicy]!
-    var afManager : Manager!
+    var afManager: Manager!
     
-    var isSimulatingCertificateCorruption: Bool?
+    var isSimulatingCertificateCorruption = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -43,18 +41,21 @@ class ViewController: UIViewController, NSURLSessionDelegate, NSURLSessionTaskDe
     
     @IBAction func alamoFireRequestHandler(sender: UIButton) {
         self.activityIndicator.startAnimating()
-        self.afManager.request(.GET, self.urlTextField.text!)
-            .response { request, response, data, error in
-                if error == nil {
-                    if let responseData = data {
-                        self.responseTextView.text = String(data: responseData, encoding: NSUTF8StringEncoding)!
+        if let urlText = self.urlTextField.text {
+            self.afManager.request(.GET, urlText)
+                .response { request, response, data, error in
+                    self.activityIndicator.stopAnimating()
+                    
+                    guard let data = data where error == nil else {
+                        self.responseTextView.text = error!.description
+                        self.responseTextView.textColor = UIColor.redColor()
+                        return
                     }
+                    
+                    self.responseTextView.text = String(data: data, encoding: NSUTF8StringEncoding)!
                     self.responseTextView.textColor = UIColor.blackColor()
-                } else {
-                    self.responseTextView.text = error?.description
-                    self.responseTextView.textColor = UIColor.redColor()
-                }
-                self.activityIndicator.stopAnimating()
+            }
+
         }
     }
     
@@ -65,25 +66,24 @@ class ViewController: UIViewController, NSURLSessionDelegate, NSURLSessionTaskDe
                 self.activityIndicator.stopAnimating()
                 })
             
-            if let _ = data {
+            guard let data = data where error == nil else {
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                    self.responseTextView.text = String(data: data!, encoding: NSUTF8StringEncoding)
-                    self.responseTextView.textColor = UIColor.blackColor()
-                })
-            }
-            
-            if let _ = error {
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                    self.responseTextView.text = error?.description
+                    self.responseTextView.text = error!.description
                     self.responseTextView.textColor = UIColor.redColor()
                 })
+                return
             }
+            
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                self.responseTextView.text = String(data: data, encoding: NSUTF8StringEncoding)
+                self.responseTextView.textColor = UIColor.blackColor()
+            })
         }).resume()
     }
     
     @IBAction func toggleCertificateSimulation(sender: AnyObject) {
-        if self.isSimulatingCertificateCorruption != nil {
-            self.isSimulatingCertificateCorruption = nil;
+        if self.isSimulatingCertificateCorruption == true {
+            self.isSimulatingCertificateCorruption = false;
             let pathToCert = NSBundle.mainBundle().pathForResource(githubCert, ofType: "cer")
             let localCertificate:NSData = NSData(contentsOfFile: pathToCert!)!
             self.configureAlamoFireSSLPinningWithCertificateData(localCertificate)
@@ -98,6 +98,7 @@ class ViewController: UIViewController, NSURLSessionDelegate, NSURLSessionTaskDe
             self.certificateCorruptionButton.setTitle("Simulating certificate corruption", forState: UIControlState.Normal) 
         }
     }
+    
     // MARK: SSL Config
     
     func configureAlamoFireSSLPinningWithCertificateData(certificateData: NSData) {
