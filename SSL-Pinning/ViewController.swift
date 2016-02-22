@@ -103,8 +103,11 @@ class ViewController: UIViewController, NSURLSessionDelegate, NSURLSessionTaskDe
     
     func configureAlamoFireSSLPinningWithCertificateData(certificateData: NSData) {
         self.serverTrustPolicy = ServerTrustPolicy.PinCertificates(
+            // Getting the certificate from the certificate data
             certificates: [SecCertificateCreateWithData(nil, certificateData)!],
+            // Choose to validate the complete certificate chain, not only the certificate itself
             validateCertificateChain: true,
+            // Check that the certificate mathes the host who provided it
             validateHost: true
         )
         
