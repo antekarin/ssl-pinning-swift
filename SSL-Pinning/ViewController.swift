@@ -15,7 +15,7 @@ class ViewController: UIViewController, NSURLSessionDelegate, NSURLSessionTaskDe
     @IBOutlet weak var responseTextView: UITextView!
     @IBOutlet weak var certificateCorruptionButton: UIButton!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
-    
+
     let githubCert = "github.com"
     let corruptedCert = "corrupted"
     
@@ -61,7 +61,7 @@ class ViewController: UIViewController, NSURLSessionDelegate, NSURLSessionTaskDe
     
     @IBAction func nsurlSessionRequestHandler(sender: UIButton) {
         self.activityIndicator.startAnimating()
-        self.urlSession?.dataTaskWithURL(NSURL(string:self.urlTextField.text!)!, completionHandler: { (NSData data, NSURLResponse response, NSError error) -> Void in
+        self.urlSession?.dataTaskWithURL(NSURL(string:self.urlTextField.text!)!, completionHandler: { ( data,  response,  error) -> Void in
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
                 self.activityIndicator.stopAnimating()
                 })
@@ -140,10 +140,17 @@ class ViewController: UIViewController, NSURLSessionDelegate, NSURLSessionTaskDe
         var result: SecTrustResultType = 0
         SecTrustEvaluate(serverTrust!, &result)
         let isServerTrusted:Bool = (Int(result) == kSecTrustResultUnspecified || Int(result) == kSecTrustResultProceed)
-        
+
+        var certName = ""
+        if self.isSimulatingCertificateCorruption {
+            certName = corruptedCert
+        } else {
+            certName = githubCert
+        }
+
         // Get local and remote cert data
         let remoteCertificateData:NSData = SecCertificateCopyData(certificate!)
-        let pathToCert = NSBundle.mainBundle().pathForResource(githubCert, ofType: "cer")
+        let pathToCert = NSBundle.mainBundle().pathForResource(certName, ofType: "cer")
         let localCertificate:NSData = NSData(contentsOfFile: pathToCert!)!
         
         if (isServerTrusted && remoteCertificateData.isEqualToData(localCertificate)) {
